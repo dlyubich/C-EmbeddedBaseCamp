@@ -6,12 +6,14 @@ Simple library to work with linked lists.
 
 Linked list element is defined as following struct:
 
-```struct				s_list
+```
+struct				s_list
 {
 	void			*content;
 	size_t			content_size;
 	struct s_list	*next;
-};```
+};
+```
 
 **Supports next operations:**
 
