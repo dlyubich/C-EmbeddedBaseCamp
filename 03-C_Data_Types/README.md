@@ -17,7 +17,6 @@ struct				s_list
 
 **Supports next operations:**
 
-* 
 - lst_traverse – iterate through list applying function to its nodes;
 - lst_clear – make the list empty;
 - lst_tailadd – appends one element to the end of the list;
@@ -29,4 +28,3 @@ struct				s_list
 - lst_extend - add the content to existing list;
 - lst_headadd - add the element at the beginning of the list;
 - lst_new - allocates new linked list.
-*
