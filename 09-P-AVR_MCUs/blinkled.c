@@ -4,9 +4,8 @@
 #include <limits.h>
 #include <util/delay.h>
 
-#define a 22695477 
-#define c 0
-unsigned long b = 1;
+uint16_t __seed = 1;
+#define my_rand() ({__seed = 5 * __seed + 3;})
 
 /**
  * soft_delay() - wastes CPU time crunching cycle to achieve delay
@@ -28,111 +27,48 @@ static void soft_delay(volatile uint16_t N)
 	}
 }
 
-uint16_t Rand(void) 
-{
-	static uint32_t Z;
-	
-	Z = b = (a * b + c) % ULONG_MAX;
-	
-	return (uint16_t)Z;
-}
-
-void pwm_duty(int n)
-{
-	switch(n) {
-		case 15:
-			OCR2A = 255;
-			break;
-		case 14:
-			OCR2A = 238;
-			break;
-		case 13:
-			OCR2A = 221;
-			break;
-		case 12:
-			OCR2A = 204;
-			break;
-		case 11:
-			OCR2A = 187;
-			break;
-		case 10:
-			OCR2A = 170;
-			break;
-		case 9:
-			OCR2A = 153;
-			break;
-		case 8:
-			OCR2A = 136;
-			break;
-		case 7:
-			OCR2A = 119;
-			break;
-		case 6:
-			OCR2A = 102;
-			break;
-		case 5:
-			OCR2A = 85;
-			break;
-		case 4:
-			OCR2A = 68;
-			break;
-		case 3:
-			OCR2A = 51;
-			break;
-		case 2:
-			OCR2A = 34;
-			break;
-		case 1:
-			OCR2A = 17;
-			break;
-		case 0:
-			OCR2A = 0;
-			break;
-	}
-}
-
 int main(void)
 {
 	DDRB |= 1 << 3;		
 	PORTB |= 1 << 3;	
-	TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM20);
+	TCCR2A = _BV(COM2A1) |_BV(COM2B1) | _BV(WGM20);
   	TCCR2B = _BV(CS22);
 	uint16_t r;
 
 	while(1) {
-		r = Rand() % 65535;
+		r = my_rand();
 		if (r > 50461) {
-   			pwm_duty(15);
+   			OCR2A = 240 | r;     // (15 << 4) | r; 
 		} else if (r > 39976) {
-    		pwm_duty(14);
+    		OCR2A = 223 | r;     // (14 << 4) | r; 
 		} else if (r > 34078) {
-   			 pwm_duty(13);
+   			OCR2A = 206 | r;     // (13 << 4) | r; 
 		} else if (r > 30801) {
-    		pwm_duty(12);
+    		OCR2A = 191 | r;     // (12 << 4) | r; 
 		} else if (r > 27524) {
-    		pwm_duty(11);
+    		OCR2A = 176 | r;    
 		} else if (r > 24247) {
-    		pwm_duty(10);
+    		OCR2A = 161 | r;
 		} else if (r > 20971) {
-    		pwm_duty(9);
+    		OCR2A = 146 | r;
 		} else if (r > 17694) {
-    		pwm_duty(8);
+    		OCR2A = 131 | r;
 		} else if (r > 14417) {
-    		pwm_duty(7);
+    		OCR2A = 116 | r;
 		} else if (r > 11140) {
-    		pwm_duty(6);
+    		OCR2A = 101 | r;
 		} else if (r > 7863) {
-    		pwm_duty(5);
+    		OCR2A = 86 | r;
 		} else if (r > 4587) {
-    		pwm_duty(4);
+    		OCR2A = 71 | r; 
 		} else if (r > 1965) {
-    		pwm_duty(3);
+    		OCR2A = 56 | r; 
 		} else if (r > 1310) {
-    		pwm_duty(2);
+    		OCR2A = 41 | r;
 		} else if (r > 654) {
-    		pwm_duty(1);
+    		OCR2A = 26 | r;
 		} else {
-    		pwm_duty(0);
+    		OCR2A = 0;
 	}
 		soft_delay(50);	
 	}
