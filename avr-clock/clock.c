@@ -142,6 +142,11 @@ int main(void)
 	/* switch on interrupts by falling edge */
 	EICRA |= (1<<ISC01) | (0 << ISC00) | (1 << ISC11);
 	EIMSK |= (1 << INT0) | (1 << INT1);
+
+	/* Setting clock buttons			 */
+	DDRD |= (0 << 2) | (0 << 3) | (0 << 4) | (0 << 5);
+	PORTD |= (1 << 2) | (1 << 3) | (1 << 4) | (1 << 5);
+	
 	while (1) {
 		
 		if (fl == 1) {
@@ -168,10 +173,6 @@ int main(void)
 				arr[1] &= ~(1 << 7);
 			segm_indicate4(&display, arr);
 		}
-
-		/* Setting clock buttons			 */
-		DDRD |= (0 << 2) | (0 << 3) | (0 << 4) | (0 << 5);
-		PORTD |= (1 << 2) | (1 << 3) | (1 << 4) | (1 << 5);
 		
 		if (fl != 1){
 		/* Setting hours manually			 */
